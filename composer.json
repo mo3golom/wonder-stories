@@ -1,0 +1,45 @@
+{
+  "name": "mo3golom/wonder-stories",
+  "description": "Service for generating stories from source data",
+  "authors": [
+    {
+      "name": "Ilya Ponamarev",
+      "email": "ponamarev95@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.0",
+    "intervention/image": "^2.6",
+    "league/flysystem": "^2.2",
+    "nesbot/carbon": "^2.52",
+    "symfony/yaml": "^5.3",
+    "vlucas/valitron": "^1.4"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "phpunit/phpunit": "^9.5",
+    "spatie/ray": "^1.28",
+    "vimeo/psalm": "^4.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mo3golom\\WonderStories\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Mo3golom\\WonderStories\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "psalm": "vendor/bin/psalm",
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+    "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
