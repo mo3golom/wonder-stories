@@ -12,13 +12,14 @@
     "intervention/image": "^2.6",
     "league/flysystem": "^2.2",
     "nesbot/carbon": "^2.52",
-    "symfony/yaml": "^5.3",
+    "php-ffmpeg/php-ffmpeg": "^0.18.0",
     "vlucas/valitron": "^1.4"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^3.0",
     "phpunit/phpunit": "^9.5",
+    "slevomat/coding-standard": "^7.0",
     "spatie/ray": "^1.28",
+    "squizlabs/php_codesniffer": "^3.6",
     "vimeo/psalm": "^4.8"
   },
   "autoload": {
@@ -32,10 +33,11 @@
     }
   },
   "scripts": {
-    "psalm": "vendor/bin/psalm",
+    "check-style": "./vendor/bin/phpcs -p --standard=phpcs.xml src",
+    "fix-style": "./vendor/bin/phpcbf -p --standard=phpcs.xml --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src",
+    "psalm": "./vendor/bin/psalm --config=psalm.xml --long-progress --php-version=7.4 --no-cache --show-info=true",
     "test": "vendor/bin/phpunit",
-    "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-    "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
   },
   "config": {
     "sort-packages": true

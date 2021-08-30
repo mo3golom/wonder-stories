@@ -4,28 +4,31 @@ declare(strict_types=1);
 
 namespace Mo3golom\WonderStories\Service;
 
-use Carbon\Carbon;
 use Intervention\Image\Gd\Font as GdFont;
+use Intervention\Image\Gd\Shapes\RectangleShape;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Mo3golom\WonderStories\DTO\Font;
-use Mo3golom\WonderStories\Factory\FileSystemFactory;
 
+/**
+ * Class TextImageService
+ */
 class TextImageService
 {
     private const MAX_LINE_LENGTH = 45;
 
-    private int $offset;
+    private int $offset = 4;
 
-    private Font $font;
+    private ?Font $font = null;
 
     private array $lines = [];
 
-    private Image $canvas;
+    private bool $withBackground = false;
+
+    private string $backgroundColor = '#ff0000';
 
     public function __construct(
-        private ImageManager $imageManager,
-        private FileSystemFactory $fileSystemFactory
+        private ImageManager $imageManager
     ) {
     }
 
@@ -50,54 +53,80 @@ class TextImageService
         return $this;
     }
 
-    public function generate(?int $width = null, ?int $height = null): TextImageService
+    public function setWithBackground(bool $withBackground): TextImageService
     {
-        $y = $this->offset + ($this->font->getSize() / 2);
-
-        $this->canvas = $this->imageManager->canvas($width ?? 1, $height ?? 1);
-
-        $calcWidth = 0;
-
-        foreach ($this->lines as $i => $line) {
-            $this->canvas->text($line, $this->offset, $y, function (GdFont $font) use (&$calcWidth) {
-                $font->file($this->font->getPath());
-                $font->size($this->font->getSize());
-                $font->color($this->font->getColor());
-
-                $size = $font->getBoxSize();
-                $calcWidth = $calcWidth < $size['width'] ? $size['width'] : $calcWidth;
-            });
-
-            // Магическая формула, вычисленная эмпирическим путем
-            $y += ($this->font->getSize() - ($this->font->getSize() / 7));
-        }
-
-        // Если не была задана ширина и высота изображения, то пересоздаем изображение с подсчитанными размерами
-        if (null === $width && null === $height) {
-            return $this->generate($calcWidth + $this->offset * 2, (int)$y);
-        }
+        $this->withBackground = $withBackground;
 
         return $this;
     }
 
-    public function get(): Image
+    public function setBackgroundColor(string $backgroundColor): TextImageService
     {
-        return $this->canvas;
+        $this->backgroundColor = $backgroundColor;
+
+        return $this;
     }
 
-    public function save(string $disk = 'public', ?string $filename = null, string $format = 'png'): string
+    public function generate(): Image
     {
-        $now = Carbon::now();
-        $path = sprintf(
-            '%s/%s/%s/%s.png',
-            $now->year,
-            $now->month,
-            $now->day,
-            $filename ?? "text_image_{$now->format('dmYHis')}"
-        );
+        $calcWidth = 1;
+        $calcHeight = 0;
 
-        $this->fileSystemFactory->adapter('local')->write($path, (string)$this->canvas->encode($format, 100));
+        $fonts = [];
+        $y = $this->offset;
 
-        return $path;
+        foreach ($this->lines as $i => $line) {
+            $font = new GdFont($line);
+
+            if (null !== $this->font) {
+                $font->file($this->font->getPath());
+                $font->size($this->font->getSize());
+                $font->color($this->font->getColor());
+            }
+
+            $fonts[$i] = [
+                'font' => $font,
+                'posX' => 0,
+                'posY' => 0,
+            ];
+
+            // Из-за особенностей реализации шрифта в библиотеке
+            // Нельзя установить align или valign, поэтому приходится использовать кое какой костыль
+            $box = $font->getBoxSize();
+            $fonts[$i]['posX'] = $this->offset - $box[6];
+            $fonts[$i]['posY'] = $y - $box[7];
+
+            $calcWidth = $calcWidth < $box['width'] ? $box['width'] : $calcWidth;
+            $calcHeight += $box['height'] + $this->offset;
+            $y += $box['height'] + $this->offset;
+        }
+
+        $calcWidth += $this->offset * 2;
+        $calcHeight += $this->offset;
+        $canvas = $this->imageManager->canvas($calcWidth, $calcHeight);
+
+        // Рисуем подложку, только если была включена опция
+        // и передана ширина и высота
+        if ($this->withBackground) {
+            $canvas->rectangle(
+                0,
+                0,
+                $calcWidth,
+                $calcHeight,
+                function (RectangleShape $shape) {
+                    $shape->background($this->backgroundColor);
+                }
+            );
+        }
+
+        foreach ($fonts as $font) {
+            $font['font']->applyToImage(
+                $canvas,
+                $font['posX'],
+                $font['posY']
+            );
+        }
+
+        return $canvas;
     }
 }

@@ -7,3 +7,4 @@ coverage
 docs
 vendor
 .php-cs-fixer.cache
+/storage/

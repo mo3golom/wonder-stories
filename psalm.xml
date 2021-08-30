@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-        errorLevel="4"
-        findUnusedVariablesAndParams="true"
+        errorLevel="1"
         resolveFromConfigFile="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
@@ -9,8 +8,24 @@
 >
     <projectFiles>
         <directory name="src"/>
+
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <MissingConstructor errorLevel="suppress"/>
+        <MixedAssignment errorLevel="suppress"/>
+        <MixedArgument errorLevel="suppress"/>
+        <MixedArrayAccess errorLevel="suppress"/>
+        <MixedMethodCall errorLevel="suppress"/>
+        <MixedOperand errorLevel="suppress"/>
+        <MixedArrayOffset errorLevel="suppress"/>
+        <MixedArrayAssignment errorLevel="suppress"/>
+        <MixedReturnStatement errorLevel="suppress"/>
+        <MixedInferredReturnType errorLevel="suppress"/>
+        <MixedArgumentTypeCoercion errorLevel="suppress"/>
+        <InvalidStringClass  errorLevel="suppress"/>
+    </issueHandlers>
 </psalm>

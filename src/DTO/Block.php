@@ -8,9 +8,16 @@ class Block
 {
     private Type $type;
 
-    private Timing $timing;
+    private float $duration;
+
+    private float $startAt;
 
     private Position $position;
+
+    /**
+     * @var BlockFrame[]
+     */
+    private array $frames = [];
 
     public function getType(): Type
     {
@@ -24,14 +31,26 @@ class Block
         return $this;
     }
 
-    public function getTiming(): Timing
+    public function getDuration(): float
     {
-        return $this->timing;
+        return $this->duration;
     }
 
-    public function setTiming(Timing $timing): Block
+    public function setDuration(float $duration): Block
     {
-        $this->timing = $timing;
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getStartAt(): float
+    {
+        return $this->startAt;
+    }
+
+    public function setStartAt(float $startAt): Block
+    {
+        $this->startAt = $startAt;
 
         return $this;
     }
@@ -44,6 +63,23 @@ class Block
     public function setPosition(Position $position): Block
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    public function getFrames(): array
+    {
+        return $this->frames;
+    }
+
+    /**
+     * @param BlockFrame[] $frames
+     *
+     * @return $this
+     */
+    public function setFrames(array $frames): Block
+    {
+        $this->frames = $frames;
 
         return $this;
     }

@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Mo3golom\WonderStories\DTO;
 
+use Mo3golom\WonderStories\Helper\KernelHelper;
+
 class Font
 {
-    private int $size;
+    private int $size = 24;
 
-    private string $path = __DIR__ . '/../../resources/fonts/Roboto-Regular.ttf';
+    private string $path;
 
-    private string $color;
+    private string $color = '#000000';
+
+    public function __construct()
+    {
+        // Шрифт по умолчанию
+        $this->path = KernelHelper::getProjectDir() . '/resources/fonts/Roboto-Regular.ttf';
+    }
 
     public function getSize(): int
     {

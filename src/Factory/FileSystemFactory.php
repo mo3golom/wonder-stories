@@ -5,25 +5,35 @@ declare(strict_types=1);
 namespace Mo3golom\WonderStories\Factory;
 
 use InvalidArgumentException;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
 use Mo3golom\WonderStories\Exception\InvalidConfigFileSystemFactoryException;
-use Symfony\Component\Yaml\Yaml;
+use Mo3golom\WonderStories\Filesystem\Filesystem;
+use Mo3golom\WonderStories\Filesystem\LocalFilesystemAdapter;
+use Mo3golom\WonderStories\Helper\KernelHelper;
 use Valitron\Validator;
 
+/**
+ * Class FileSystemFactory
+ */
 class FileSystemFactory implements FileSystemInterface
 {
     private array $config;
 
-    public function __construct()
+    /**
+     * FileSystemFactory constructor.
+     *
+     * @param array|null $config
+     *
+     * @psalm-suppress UnresolvableInclude
+     */
+    public function __construct(?array $config = null)
     {
-        $this->setConfig(Yaml::parseFile(__DIR__ . '/../../config/Filesystem.yaml'));
+        $this->config = $config ?? require(KernelHelper::getProjectDir() . '/config/filesystem.php');
     }
 
     /**
      * @param string $type
      *
-     * @return Filesystem
+     * @return \Mo3golom\WonderStories\Filesystem\Filesystem
      *
      * @throws InvalidConfigFileSystemFactoryException
      */
@@ -33,7 +43,13 @@ class FileSystemFactory implements FileSystemInterface
             case self::LOCAL:
                 $this->validateConfig(['required' => ['local.root']]);
 
-                $adapter = new LocalFilesystemAdapter($this->config['local']['root']);
+                $adapter = new LocalFilesystemAdapter(
+                    sprintf(
+                        '%s/%s',
+                        KernelHelper::getProjectDir(),
+                        ltrim($this->config[self::LOCAL]['root'], '/\\')
+                    )
+                );
 
                 break;
             default:
@@ -41,13 +57,6 @@ class FileSystemFactory implements FileSystemInterface
         }
 
         return new Filesystem($adapter);
-    }
-
-    public function setConfig(array $config): FileSystemFactory
-    {
-        $this->config = $config;
-
-        return $this;
     }
 
     /**
