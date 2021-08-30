@@ -66,11 +66,11 @@ echo $wonderStories->createFromCreative($creative);
 Также при создании сервиса можно передать свою конфигурацию:
 ```php
 $wonderStories = \Mo3golom\WonderStories\Service\WonderStories::make([
-    'filesystem' => [
+     'filesystem' => [
         'local' => [
             'root' => './package'
-        ]
-    ],
+        ],
+     ],
      'block_types' => [
             \Mo3golom\WonderStories\Enum\BlockTypes::TYPE_TEXT => [
                 'id' => \Mo3golom\WonderStories\Enum\BlockTypes::TYPE_TEXT,
@@ -82,7 +82,7 @@ $wonderStories = \Mo3golom\WonderStories\Service\WonderStories::make([
                 'name' => 'Таймер',
                 'processor' => \Mo3golom\WonderStories\Service\Block\TypeProcessors\Timer::class,
             ],
-    ]  
+     ], 
 ]);
 echo $wonderStories->createFromCreative($creative);
 ```
