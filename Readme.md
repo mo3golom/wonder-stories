@@ -64,7 +64,7 @@ echo $wonderStories->createFromCreative($creative);
 ```
 
 
-###Типы Блоков:
+## Типы Блоков:
 
 Есть несколько доступных типов блоков (устанавливается в DTO Type, метод setId)
 
