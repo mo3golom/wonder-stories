@@ -10,7 +10,7 @@
   "require": {
     "php": "^8.0",
     "intervention/image": "^2.6",
-    "league/flysystem": "^2.2",
+    "league/flysystem": "1.1.5",
     "nesbot/carbon": "^2.52",
     "php-ffmpeg/php-ffmpeg": "^0.18.0",
     "vlucas/valitron": "^1.4"

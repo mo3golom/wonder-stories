@@ -46,7 +46,7 @@ class WonderStories
             }
 
             $outputDir = 'final_video';
-            $disk->createDirectory($outputDir);
+            $disk->createDir($outputDir);
             $output = sprintf(
                 '%s/final_%s.mp4',
                 $disk->getFullPath($outputDir),

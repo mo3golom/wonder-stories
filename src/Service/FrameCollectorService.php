@@ -25,7 +25,7 @@ class FrameCollectorService
         $pathPattern = $disk->getFullPath("{$tempDir}/%03d.png");
 
         $outputDir = 'frame_compose_result';
-        $disk->createDirectory($outputDir);
+        $disk->createDir($outputDir);
 
         foreach ($frames as $i => $frame) {
             $path = sprintf(
@@ -45,7 +45,7 @@ class FrameCollectorService
         );
 
         if ($result) {
-            $disk->deleteDirectory($tempDir);
+            $disk->deleteDir($tempDir);
 
             return $outputVideo;
         }

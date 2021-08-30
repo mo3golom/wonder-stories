@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Mo3golom\WonderStories\Factory;
 
 use InvalidArgumentException;
+use League\Flysystem\Adapter\Local;
 use Mo3golom\WonderStories\Exception\InvalidConfigFileSystemFactoryException;
 use Mo3golom\WonderStories\Filesystem\Filesystem;
-use Mo3golom\WonderStories\Filesystem\LocalFilesystemAdapter;
 use Mo3golom\WonderStories\Helper\KernelHelper;
 use Valitron\Validator;
 
@@ -43,7 +43,7 @@ class FileSystemFactory implements FileSystemInterface
             case self::LOCAL:
                 $this->validateConfig(['required' => ['local.root']]);
 
-                $adapter = new LocalFilesystemAdapter(
+                $adapter = new Local(
                     sprintf(
                         '%s/%s',
                         KernelHelper::getProjectDir(),
