@@ -43,13 +43,7 @@ class FileSystemFactory implements FileSystemInterface
             case self::LOCAL:
                 $this->validateConfig(['required' => ['local.root']]);
 
-                $adapter = new Local(
-                    sprintf(
-                        '%s/%s',
-                        KernelHelper::getProjectDir(),
-                        ltrim($this->config[self::LOCAL]['root'], '/\\')
-                    )
-                );
+                $adapter = new Local($this->config[self::LOCAL]['root']);
 
                 break;
             default:
