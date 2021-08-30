@@ -63,6 +63,30 @@ $wonderStories = \Mo3golom\WonderStories\Service\WonderStories::make();
 echo $wonderStories->createFromCreative($creative);
 ```
 
+Также при создании сервиса можно передать свою конфигурацию:
+```php
+$wonderStories = \Mo3golom\WonderStories\Service\WonderStories::make([
+    'filesystem' => [
+        'local' => [
+            'root' => './package'
+        ]
+    ],
+     'block_types' => [
+            \Mo3golom\WonderStories\Enum\BlockTypes::TYPE_TEXT => [
+                'id' => \Mo3golom\WonderStories\Enum\BlockTypes::TYPE_TEXT,
+                'name' => 'Текст',
+                'processor' => \Mo3golom\WonderStories\Service\Block\TypeProcessors\Text::class,
+            ],
+            \Mo3golom\WonderStories\Enum\BlockTypes::TYPE_TIMER => [
+                'id' => \Mo3golom\WonderStories\Enum\BlockTypes::TYPE_TIMER,
+                'name' => 'Таймер',
+                'processor' => \Mo3golom\WonderStories\Service\Block\TypeProcessors\Timer::class,
+            ],
+    ]  
+]);
+echo $wonderStories->createFromCreative($creative);
+```
+
 
 ## Типы Блоков:
 
