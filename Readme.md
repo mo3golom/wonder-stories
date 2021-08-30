@@ -1,5 +1,6 @@
 # Wonder Stories
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/mo3golom/wonder-stories.svg?style=flat-square)](https://packagist.org/packages/mo3golom/wonder-stories)
 
 Сервис для генерации видео креативов для instagram stroies / reels или тик-ток видео.
 
