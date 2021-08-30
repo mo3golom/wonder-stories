@@ -115,3 +115,7 @@ echo $wonderStories->createFromCreative($creative);
     'background_color' => '#000000', // цвет фона
 ]
 ```
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
